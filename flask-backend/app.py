@@ -16,7 +16,9 @@ db_password = os.getenv("MONGO_PASSWORD")
 encoded_username = quote_plus(db_username)
 encoded_password = quote_plus(db_password)
 
-mongo_client = pymongo.MongoClient(os.getenv("MONGO_URI"))
+mongo_uri =f"mongodb+srv://{encoded_username}:{encoded_password}@courses.9qoap.mongodb.net/?retryWrites=true&w=majority&appName=courses"
+
+mongo_client = pymongo.MongoClient()
 db = mongo_client["university"]
 courses_collection = db["courses"]
 
