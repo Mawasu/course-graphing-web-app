@@ -19,7 +19,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 const CourseSchema = new mongoose.Schema({ id: String, name: String, prerequisites: [String], description: String});
 const Course = mongoose.model('Course', CourseSchema);
 
-app.get('/node-api/courses', async (c) => {
+app.get('/api/courses', async (c) => {
     const courses = await Course.find();
     return c.json(courses);
 });
