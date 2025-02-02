@@ -8,8 +8,22 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-export default {
-	async fetch(request, env, ctx) {
-		return new Response('Hello World!');
-	},
-};
+import { Router } from 'express';
+import { createServer } from '@hono/node-server';
+import { Hono } from 'hono';
+import mongoose from 'mongoose';
+
+const app = new Hono();
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const CourseSchema = new mongoose.Schema({ name: String, prerequisites: [String], postrequisites: [String], description: String, creditHours: Number });
+const Course = mongoose.model('Course', CourseSchema);
+
+app.get('/node-api/courses', async (c) => {
+    const courses = await Course.find();
+    return c.json(courses);
+});
+
+export default createServer({
+  fetch: app.fetch,
+});
