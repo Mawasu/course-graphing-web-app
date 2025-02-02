@@ -19,7 +19,7 @@ encoded_password = quote_plus(db_password)
 mongo_uri =f"mongodb+srv://{encoded_username}:{encoded_password}@courses.9qoap.mongodb.net/?retryWrites=true&w=majority&appName=courses"
 
 mongo_client = pymongo.MongoClient()
-db = mongo_client["university"]
+db = mongo_client["catelog"]
 courses_collection = db["courses"]
 
 @app.route('/api/courses', methods=['GET'])
