@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "axios": "^1.7.9",
+    "cors": "^2.8.5",
     "cra-template": "1.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "^5.0.1",
+    "testing-library": "^0.0.2"
   },
   "homepage": "https://course-graphing-web-app.pages.dev/",
   "scripts": {
@@ -16,7 +20,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "wrangler pages publish build"
+    "deploy": "wrangler pages publish build",
+    "preview:worker": "npm run build && wrangler dev ../express-worker/src/index.js"
   },
   "eslintConfig": {
     "extends": [

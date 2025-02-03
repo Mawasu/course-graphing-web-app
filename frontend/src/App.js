@@ -6,7 +6,7 @@ function App() {
   const [courses, setCourses] = useState([]);
 
     useEffect(() => {
-        axios.get("https://course-graphing-app.onrender.com/api/courses")
+        axios.get("http://localhost:8787/api/courses")
             .then(response => setCourses(response.data))
             .catch(error => console.error("API error:", error));
     }, []);
@@ -15,9 +15,7 @@ function App() {
         <div>
             <h1>Course List</h1>
             <ul>
-                {courses.map(course => (
-                    <li key={course.id}>{course.name}</li>
-                ))}
+                <a>{courses}</a>
             </ul>
         </div>
     );

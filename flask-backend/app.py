@@ -4,6 +4,7 @@ import pymongo
 import os
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
+import requests
 
 load_dotenv()  
 
@@ -25,7 +26,7 @@ courses_collection = db["courses"]
 @app.route('/api/courses/', methods=['GET'])
 def get_course_count():
     courses = courses_collection.count_documents({})  
-    return jsonify({"number": courses}), 404
+    return jsonify(courses), 404
 
 # Get a specific course by ID
 @app.route('/api/courses/<string:course_id>', methods=['GET'])
@@ -35,6 +36,14 @@ def get_course(course_id):
         course['_id'] = str(course['_id'])
         return jsonify(course)
     return jsonify({"error": "Course not found"}), 404
+
+@app.route('/send-to-express', methods=['POST'])
+def send_to_express():
+    express_url = "http://localhost:8787/api/receive-data"
+    data = {"number": "two"}
+    response = requests.post(express_url, json=data)
+    print(response)
+    return jsonify(response.json())
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)  # Use Gunicorn for production (later)
