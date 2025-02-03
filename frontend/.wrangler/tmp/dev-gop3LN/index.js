@@ -30571,7 +30571,6 @@ app.get("/api", (c) => c.text("ok"));
 app.get("/api/courses", async (c) => {
   const response = await node_fetch_default("http://localhost:5001/api/courses");
   const data = await response.json();
-  console.log(data);
   return c.json(data);
 });
 app.post("/api/receive-data", async (c) => {
