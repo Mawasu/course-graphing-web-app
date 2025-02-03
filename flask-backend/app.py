@@ -18,20 +18,26 @@ encoded_password = quote_plus(db_password)
 
 mongo_uri =f"mongodb+srv://{encoded_username}:{encoded_password}@courses.9qoap.mongodb.net/?retryWrites=true&w=majority&appName=courses"
 
-mongo_client = pymongo.MongoClient()
-db = mongo_client["catelog"]
+mongo_client = pymongo.MongoClient(mongo_uri)
+db = mongo_client["Catelog"]
 courses_collection = db["courses"]
 
-@app.route('/api/courses', methods=['GET'])
+@app.route('/api/courses/find', methods=['GET'])
 def get_courses():
-    courses = list(courses_collection.find({}, {"_id": 0}))  # Exclude _id field
+    courses = list(courses_collection.find({})) 
     return jsonify(courses)
 
+@app.route('/api/courses/', methods=['GET'])
+def get_course_count():
+    courses = courses_collection.count_documents({})  
+    return jsonify({"number": courses}), 404
+
 # Get a specific course by ID
-@app.route('/api/courses/<int:course_id>', methods=['GET'])
+@app.route('/api/courses/<string:course_id>', methods=['GET'])
 def get_course(course_id):
-    course = courses_collection.find_one({"id": course_id}, {"_id": 0})
+    course = courses_collection.find_one({"id": course_id})
     if course:
+        course['_id'] = str(course['_id'])
         return jsonify(course)
     return jsonify({"error": "Course not found"}), 404
 

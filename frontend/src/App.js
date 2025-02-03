@@ -6,7 +6,7 @@ function App() {
   const [courses, setCourses] = useState([]);
 
     useEffect(() => {
-        axios.get("http://express-worker.non300300.workers.dev/api/courses")
+        axios.get("https://course-graphing-app.onrender.com/api/courses")
             .then(response => setCourses(response.data))
             .catch(error => console.error("API error:", error));
     }, []);
