@@ -10,9 +10,6 @@
   "compatibility_date": "2025-01-29",
   "observability": {
     "enabled": true
-  },
-  "env": { 
-    "MONGO_URI": "mongodb+srv://malas:Math@2016@courses.9qoap.mongodb.net/?retryWrites=true&w=majority&appName=courses" 
   }
   
 }

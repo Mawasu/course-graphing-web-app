@@ -22,11 +22,6 @@ mongo_client = pymongo.MongoClient(mongo_uri)
 db = mongo_client["Catelog"]
 courses_collection = db["courses"]
 
-@app.route('/api/courses/find', methods=['GET'])
-def get_courses():
-    courses = list(courses_collection.find({})) 
-    return jsonify(courses)
-
 @app.route('/api/courses/', methods=['GET'])
 def get_course_count():
     courses = courses_collection.count_documents({})  
@@ -40,13 +35,6 @@ def get_course(course_id):
         course['_id'] = str(course['_id'])
         return jsonify(course)
     return jsonify({"error": "Course not found"}), 404
-
-# Add a new course
-@app.route('/api/courses', methods=['POST'])
-def add_course():
-    data = request.get_json()
-    courses_collection.insert_one(data)
-    return jsonify({"message": "Course added successfully!"}), 201
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)  # Use Gunicorn for production (later)
