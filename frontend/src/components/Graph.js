@@ -8,12 +8,12 @@ const Graph = ({ course_id }) => {
 
     useEffect(() => {
         if(course_id) {
-            axios.get(`http://localhost:8787/api/courses/${course_id}`)
+            axios.get(`express-worker.non300300.workers.dev/api/courses/${course_id}`)
             .then((response) => response.data)
             .then((data) => setGraphData(data))
             .catch((error) => console.error("Error getting data:", error));
         } else {
-            axios.get("http://localhost:8787/api/courses")
+            axios.get("express-worker.non300300.workers.dev/api/courses")
             .then((response) => response.data)
             .then((data) => setGraphData(data))
             .catch((error) => console.error("Error getting data:", error));

@@ -33,7 +33,7 @@ app.get('/api/courses/:course_id', async (c) => {
   const { course_id } = c.req.param();  // Capture URL parameter
 
   // Construct the Flask backend URL
-  const flaskUrl = `http://localhost:5001/api/courses/${course_id}`;
+  const flaskUrl = `https://course-graphing-app.onrender.com/api/courses/${course_id}`;
 
   try {
     // Forward the request to Flask
@@ -49,7 +49,7 @@ app.get('/api/courses/:course_id', async (c) => {
 });
 
 app.get('/api/courses', async (c) => {
-  const response = await fetch('http://localhost:5001/api/courses/');
+  const response = await fetch('https://course-graphing-app.onrender.com/api/courses/');
   const data = await response.json();
   return c.json(data);
 })
