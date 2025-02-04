@@ -29,11 +29,30 @@ app.get('/', (c) => c.text("AHHHHHHH"));
 
 app.get('/api', (c) => c.text("ok"));
 
+app.get('/api/courses/:course_id', async (c) => {
+  const { course_id } = c.req.param();  // Capture URL parameter
+
+  // Construct the Flask backend URL
+  const flaskUrl = `http://localhost:5001/api/courses/${course_id}`;
+
+  try {
+    // Forward the request to Flask
+    const response = await fetch(flaskUrl);
+    const data = await response.json();
+
+    // Return the data from Flask to the React frontend
+    return c.json(data);
+  } catch (error) {
+    console.error("Error proxying request:", error);
+    return c.json({ error: "Failed to fetch data from backend" }, 500);
+  }
+});
+
 app.get('/api/courses', async (c) => {
-  const response = await fetch('http://localhost:5001/api/courses');
+  const response = await fetch('http://localhost:5001/api/courses/');
   const data = await response.json();
   return c.json(data);
-});
+})
 
 app.post('/api/receive-data', async (c) => {
   const body = await c.req.json();

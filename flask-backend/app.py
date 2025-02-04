@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 import requests
+import re
 
 load_dotenv()  
 
@@ -25,17 +26,45 @@ courses_collection = db["courses"]
 
 @app.route('/api/courses/', methods=['GET'])
 def get_course_count():
-    courses = courses_collection.count_documents({})  
-    return jsonify(courses), 404
+    courses = []
+    edges = []
+    courseIterator = courses_collection.find({})
+    for entry in courseIterator:
+        courses.append({"id": entry['id'], "label": entry['name']})
+        
+        postreqCursor = courses_collection.find({"postrequisites": {"$in": [entry['id']]}})
+        for postreq in postreqCursor:
+            edges.append({"from": postreq['id'], "to": entry['id']})
+        
+
+    return jsonify({"nodes": courses, "edges": edges})
 
 # Get a specific course by ID
 @app.route('/api/courses/<string:course_id>', methods=['GET'])
 def get_course(course_id):
-    course = courses_collection.find_one({"id": course_id})
-    if course:
-        course['_id'] = str(course['_id'])
-        return jsonify(course)
-    return jsonify({"error": "Course not found"}), 404
+    courses = []
+    edges = []
+    course_id = re.sub(r'(\d)', r' \1', course_id, 1)
+    courseIterator = courses_collection.find({'id': course_id})
+    for entry in courseIterator: 
+        courses.append({"id": entry['id'], "label": entry['name']})
+        
+        postreqCursor = courses_collection.find({"postrequisites": {"$in": [entry['id']]}})
+        for prereq in entry['postrequisites']:
+            prereq_course = courses_collection.find_one({'id': prereq})
+            if(prereq_course == None):
+                courses.append({"id": prereq, "label": prereq})
+                edges.append({"from": entry['id'], "to": prereq})
+            else:
+                print(prereq_course)
+                courses.append({"id": prereq_course['id'], "label": prereq_course['name']})
+                edges.append({"from": entry['id'], "to": prereq_course['id']})
+        for postreq in postreqCursor:
+            courses.append({"id": postreq['id'], "label": postreq['name']})
+            edges.append({"from": postreq['id'], "to": entry['id']})
+        
+
+    return jsonify({"nodes": courses, "edges": edges})
 
 @app.route('/send-to-express', methods=['POST'])
 def send_to_express():

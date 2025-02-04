@@ -1,22 +1,28 @@
 import './App.css';
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import Graph from "./components/Graph"
+import React, { useState } from "react";
+
+
 
 function App() {
-  const [courses, setCourses] = useState([]);
+    const [courseId, setCourseId] = useState(''); 
 
-    useEffect(() => {
-        axios.get("http://localhost:8787/api/courses")
-            .then(response => setCourses(response.data))
-            .catch(error => console.error("API error:", error));
-    }, []);
+    const handleInputChange = (event) => {
+        setCourseId(event.target.value);
+    };
 
     return (
         <div>
             <h1>Course List</h1>
-            <ul>
-                <a>{courses}</a>
-            </ul>
+            <Graph course_id={courseId} />
+            <h2>
+                <input
+                    type="text"
+                    value={courseId}
+                    onChange={handleInputChange} // Update state on text change
+                    placeholder="Enter Course Name"
+                />
+            </h2>
         </div>
     );
 }

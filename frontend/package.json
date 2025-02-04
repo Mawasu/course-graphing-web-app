@@ -11,7 +11,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-scripts": "^5.0.1",
-    "testing-library": "^0.0.2"
+    "testing-library": "^0.0.2",
+    "vis-network": "^9.1.9"
   },
   "homepage": "https://course-graphing-web-app.pages.dev/",
   "scripts": {
