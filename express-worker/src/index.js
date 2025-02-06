@@ -11,23 +11,17 @@
 import { Hono } from 'hono';
 import mongoose from 'mongoose';
 import fetch from 'node-fetch';
-import { cors } from 'hono/cors';
 
 const app = new Hono();
 
-// Apply CORS before defining routes
-app.use(cors({
-  origin: '*',  // Allow all origins (change this for production)
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
-}));
-
-const CourseSchema = new mongoose.Schema({ id: String, name: String, prerequisites: [String], description: String });
-const Course = mongoose.model('Course', CourseSchema);
-
 app.get('/', (c) => c.text("AHHHHHHH"));
 
-app.get('/api', (c) => c.text("ok"));
+/*app.use('/api/*', async (c, next) => {
+  c.header('Access-Control-Allow-Origin', '*')
+  c.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+  c.header('Access-Control-Allow-Headers', 'Content-Type')
+  return next()
+})*/
 
 app.get('/api/courses/:course_id', async (c) => {
   const { course_id } = c.req.param();  // Capture URL parameter
@@ -36,11 +30,9 @@ app.get('/api/courses/:course_id', async (c) => {
   const flaskUrl = `https://course-graphing-app.onrender.com/api/courses/${course_id}`;
 
   try {
-    // Forward the request to Flask
     const response = await fetch(flaskUrl);
     const data = await response.json();
 
-    // Return the data from Flask to the React frontend
     return c.json(data);
   } catch (error) {
     console.error("Error proxying request:", error);
@@ -48,10 +40,18 @@ app.get('/api/courses/:course_id', async (c) => {
   }
 });
 
-app.get('/api/courses', async (c) => {
-  const response = await fetch('https://course-graphing-app.onrender.com/api/courses/');
-  const data = await response.json();
-  return c.json(data);
+app.get('/api/courses/', async (c) => {
+  const flaskUrl = `https://course-graphing-app.onrender.com/api/courses/`;
+
+  try {
+    const response = await fetch(flaskUrl);
+    const data = await response.json();
+
+    return c.json(data);
+  } catch (error) {
+    console.error("Error proxying request:", error);
+    return c.json({ error: "Failed to fetch data from backend" }, 500);
+  }
 })
 
 app.post('/api/receive-data', async (c) => {
