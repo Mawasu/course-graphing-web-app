@@ -1,28 +1,36 @@
 import './App.css';
 import Graph from "./components/Graph"
-import React, { useState } from "react";
+import React, { useDeferredValue, useState } from "react";
 
 
 
 function App() {
-    const [courseId, setCourseId] = useState(''); 
+    const [tempCourseId, setTempCourseId] = useState('');
+    const [courseId, setCourseId] = useState('');
+    const deferredId = useDeferredValue(courseId);
 
     const handleInputChange = (event) => {
-        setCourseId(event.target.value);
+        setTempCourseId(event.target.value);
     };
 
     return (
         <div>
-            <h1>Course List</h1>
-            <Graph course_id={courseId} />
+            <h1>Course List
+            <Graph course_id={deferredId} />
+            </h1>
             <h2>
-                <input
-                    type="text"
-                    value={courseId}
-                    onChange={handleInputChange} // Update state on text change
-                    placeholder="Enter Course Name"
+            <input 
+                    value={tempCourseId}
+                    onChange={handleInputChange}
                 />
+                <button type="button" onClick={() => setCourseId(tempCourseId)}>
+                    Submit
+                </button>
+                <button type="button" onClick={() => setCourseId('')}>
+                    Reset
+                </button>
             </h2>
+            
         </div>
     );
 }

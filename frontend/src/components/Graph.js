@@ -5,20 +5,31 @@ import axios from "axios";
 const Graph = ({ course_id }) => {
     const containerRef = useRef(null);
     const [graphData, setGraphData] = useState({ nodes:[], edges:[] });
+    const [baseGraphData, setBaseGraphData] = useState({ nodes:[], edges:[] });
+    const [baseGraphCached, setBaseGraphCache] = useState(0);
+
+    useEffect(() => {
+        let cache = baseGraphCached;
+        if(!cache) {
+            axios.get("http://localhost:8787/api/courses")
+            .then((response) => response.data)
+            .then((data) => setBaseGraphData(data))
+            .then(console.log("base graph data secured"))
+            .catch((error) => console.error("Error getting data:", error));
+            setBaseGraphCache(1);
+        }
+    }, [baseGraphCached])
 
     useEffect(() => {
         if(course_id) {
-            axios.get(`https://express-worker.non300300.workers.dev/api/courses/${course_id}`)
+            axios.get(`http://localhost:8787/api/courses/${course_id}`)
             .then((response) => response.data)
             .then((data) => setGraphData(data))
             .catch((error) => console.error("Error getting data:", error));
         } else {
-            axios.get("https://express-worker.non300300.workers.dev/api/courses")
-            .then((response) => response.data)
-            .then((data) => setGraphData(data))
-            .catch((error) => console.error("Error getting data:", error));
+            setGraphData(baseGraphData);
         }
-    }, [course_id]);
+    }, [course_id, baseGraphData]);
 
     useEffect(() => {
         if (graphData.nodes.length === 0) return;
