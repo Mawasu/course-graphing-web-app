@@ -30570,7 +30570,7 @@ app.get("/", (c) => c.text("AHHHHHHH"));
 app.get("/api", (c) => c.text("ok"));
 app.get("/api/courses/:course_id", async (c) => {
   const { course_id } = c.req.param();
-  const flaskUrl = `http://course-graphing-app.onrender.com/api/courses/${course_id}`;
+  const flaskUrl = `https://course-graphing-app.onrender.com/api/courses/${course_id}`;
   try {
     const response = await node_fetch_default(flaskUrl);
     const data = await response.json();
@@ -30581,7 +30581,7 @@ app.get("/api/courses/:course_id", async (c) => {
   }
 });
 app.get("/api/courses", async (c) => {
-  const response = await node_fetch_default("http://course-graphing-app.onrender.com/api/courses/");
+  const response = await node_fetch_default("https://course-graphing-app.onrender.com/api/courses/");
   const data = await response.json();
   return c.json(data);
 });
