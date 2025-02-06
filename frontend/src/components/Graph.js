@@ -32,7 +32,7 @@ const Graph = ({ course_id }) => {
     }, [course_id, baseGraphData]);
 
     useEffect(() => {
-        if (graphData.nodes.length === 0) return;
+        if (!graphData || !graphData.nodes || graphData.nodes.length === 0) return;
     
         const nodes = new DataSet(graphData.nodes);
         const edges = new DataSet(graphData.edges);
