@@ -15,7 +15,7 @@ function App() {
 
     return (
         <div>
-            <h1>Course List
+            <h1>Course Graph
             <Graph course_id={deferredId} />
             </h1>
             <h2>

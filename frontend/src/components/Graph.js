@@ -11,7 +11,7 @@ const Graph = ({ course_id }) => {
     useEffect(() => {
         let cache = baseGraphCached;
         if(!cache) {
-            axios.get("https://express-worker.non300300.workers.dev/api/courses/")
+            axios.get("https://course-graphing-app.onrender.com/api/courses/")
             .then((response) => response.data)
             .then((data) => setBaseGraphData(data))
             .then(console.log("base graph data secured"))
@@ -22,7 +22,7 @@ const Graph = ({ course_id }) => {
 
     useEffect(() => {
         if(course_id) {
-            axios.get(`https://express-worker.non300300.workers.dev/api/courses/${course_id}`)
+            axios.get(`https://course-graphing-app.onrender.com/api/courses/${course_id}`)
             .then((response) => response.data)
             .then((data) => setGraphData(data))
             .catch((error) => console.error("Error getting data:", error));
